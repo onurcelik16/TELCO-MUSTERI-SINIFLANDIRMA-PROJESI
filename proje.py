@@ -6,17 +6,16 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Veri setini yükle
 df = pd.read_csv("WA_Fn-UseC_-Telco-Customer-Churn.csv")
 
-# "Churn" sütununu sayısala çevir
+# "Churn" sütununu sayısala çevirme işlemi yaptık
 df['Churn'] = df['Churn'].map({'Yes': 1, 'No': 0})
 
-# TotalCharges sütununu düzelt
-df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')  # Sayısala çevir
+# TotalCharges sütununu düzelttik
+df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce') 
 df = df.assign(TotalCharges=df['TotalCharges'].fillna(df['TotalCharges'].median()))
 
-# Kategorik sütunları Label Encoding ile dönüştür
+# Kategorik sütunları Label Encoding ile dönüştürdük
 le = LabelEncoder()
 categorical_columns = ['gender', 'Partner', 'Dependents', 'PhoneService', 'MultipleLines', 'InternetService', 
                        'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 
@@ -25,14 +24,14 @@ categorical_columns = ['gender', 'Partner', 'Dependents', 'PhoneService', 'Multi
 for col in categorical_columns:
     df[col] = le.fit_transform(df[col])
 
-# Bağımsız (özellikler) ve bağımlı (hedef) değişkenleri ayır
+# Bağımsız (özellikler) ve bağımlı (hedef) değişkenleri ayırdık
 X = df.drop(columns=['customerID', 'Churn'])
 y = df['Churn']
 
-# Eğitim ve test setlerine ayır
+# Eğitim ve test setlerine ayırdık
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Hiperparametre optimizasyonu için GridSearchCV
+# Hiperparametre optimizasyonu için GridSearchCV kullandık
 param_grid = {
     'n_estimators': [100, 200, 300],
     'max_depth': [10, 20, None],
@@ -44,14 +43,14 @@ rf = RandomForestClassifier(random_state=42)
 grid_search = GridSearchCV(rf, param_grid, cv=5, n_jobs=-1, verbose=2)
 grid_search.fit(X_train, y_train)
 
-# En iyi modeli seç
+# En uygun modeli seçtik
 best_model = grid_search.best_estimator_
 print("En iyi parametreler:", grid_search.best_params_)
 
-# Test seti üzerinde tahmin yap
+# tahmin yaptırdık
 y_pred = best_model.predict(X_test)
 
-# Doğruluk oranı
+# Doğruluk oranı hesaplaması
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Doğruluk: {accuracy:.4f}")
 
@@ -69,7 +68,7 @@ plt.xlabel("Tahmin Edilen")
 plt.ylabel("Gerçek")
 plt.show()
 
-# Özellik önem derecesi
+# Özellik önem derecesi hesaplandı
 importances = best_model.feature_importances_
 feature_names = X.columns
 
