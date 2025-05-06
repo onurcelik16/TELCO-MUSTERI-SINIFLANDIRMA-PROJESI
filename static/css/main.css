@@ -1,0 +1,382 @@
+/* Ana CSS Dosyası */
+:root {
+    --primary-color: #4285f4;
+    --secondary-color: #34a853;
+    --warning-color: #fbbc05;
+    --danger-color: #ea4335;
+    --background-color: #f8f9fa;
+    --dark-background: #343a40;
+    --light-text: #f8f9fa;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: #333;
+    line-height: 1.6;
+    padding-top: 60px;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: var(--primary-color) !important;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-success {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #5c6bc0 100%);
+    color: white;
+    padding: 80px 0;
+    margin-bottom: 30px;
+    border-radius: 0 0 20px 20px;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.result-positive {
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.result-negative {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+.form-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+}
+
+.result-container {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+}
+
+.chart-container {
+    height: 400px;
+    margin-bottom: 30px;
+}
+
+.dashboard-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-card .card-body {
+    flex: 1;
+}
+
+.data-badge {
+    background-color: var(--dark-background);
+    color: var(--light-text);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    margin-right: 10px;
+}
+
+.progress {
+    height: 10px;
+    margin-bottom: 10px;
+}
+
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.step {
+    text-align: center;
+    flex: 1;
+    position: relative;
+}
+
+.step .indicator {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+}
+
+.step.active .indicator {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.step.completed .indicator {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.step-line {
+    position: absolute;
+    top: 15px;
+    height: 2px;
+    background-color: #ddd;
+    width: 100%;
+    left: 50%;
+    z-index: -1;
+}
+
+.step:last-child .step-line {
+    display: none;
+}
+
+.form-section {
+    display: none;
+}
+
+.form-section.active {
+    display: block;
+}
+
+.recommendation-card {
+    border-left: 5px solid var(--primary-color);
+    padding-left: 15px;
+}
+
+.footer {
+    background-color: var(--dark-background);
+    color: var(--light-text);
+    padding: 30px 0;
+    margin-top: 50px;
+}
+
+/* Mobil uyumluluk */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 40px 0;
+    }
+    
+    .chart-container {
+        height: 300px;
+    }
+    
+    .step-indicator {
+        flex-direction: column;
+    }
+    
+    .step {
+        margin-bottom: 10px;
+    }
+    
+    .step-line {
+        display: none;
+    }
+}
+
+/* Animasyonlar */
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Özel toggle switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Veri görselleştirme için stil */
+.shap-chart {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Rapor stilleri */
+.report-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 30px;
+}
+
+.report-header {
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.report-section {
+    margin-bottom: 25px;
+}
+
+.metric-card {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #f1f3f9;
+}
+
+.metric-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.probability-bar {
+    height: 25px;
+    border-radius: 5px;
+    margin: 10px 0;
+    position: relative;
+}
+
+.probability-fill {
+    height: 100%;
+    border-radius: 5px;
+    background: linear-gradient(90deg, var(--secondary-color) 0%, var(--danger-color) 100%);
+}
+
+.probability-marker {
+    position: absolute;
+    top: -10px;
+    width: 2px;
+    height: 45px;
+    background-color: #333;
+}
+
+.probability-label {
+    position: absolute;
+    bottom: -25px;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+}
+
+.feature-impact {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.feature-name {
+    width: 200px;
+    font-weight: 500;
+}
+
+.impact-bar-container {
+    flex-grow: 1;
+    height: 20px;
+    background-color: #eee;
+    position: relative;
+}
+
+.impact-bar {
+    height: 100%;
+    position: absolute;
+}
+
+.impact-positive {
+    background-color: var(--secondary-color);
+    right: 50%;
+    left: auto;
+}
+
+.impact-negative {
+    background-color: var(--danger-color);
+    left: 50%;
+    right: auto;
+}
+
+.impact-value {
+    margin-left: 10px;
+    font-weight: bold;
+}

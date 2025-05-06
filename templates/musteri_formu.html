@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Müşteri Sınıflandırma - Telco Müşteri Sınıflandırma{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user-plus me-2"></i> Müşteri Sınıflandırma</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('siniflandirma_sonuc') }}">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">Cinsiyet</label>
+                                <select class="form-select" name="gender" required>
+                                    <option value="">Seçiniz</option>
+                                    <option value="Male">Erkek</option>
+                                    <option value="Female">Kadın</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="SeniorCitizen" class="form-label">Yaşlı Vatandaş mı?</label>
+                                <select class="form-select" name="SeniorCitizen" required>
+                                    <option value="0">Hayır</option>
+                                    <option value="1">Evet</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="Partner" class="form-label">Partner</label>
+                                <select class="form-select" name="Partner" required>
+                                    <option value="Yes">Evet</option>
+                                    <option value="No">Hayır</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Dependents" class="form-label">Bakmakla Yükümlü Oldukları</label>
+                                <select class="form-select" name="Dependents" required>
+                                    <option value="Yes">Evet</option>
+                                    <option value="No">Hayır</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="tenure" class="form-label">Hizmet Süresi (Ay)</label>
+                                <input type="number" class="form-control" name="tenure" required min="0">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="MonthlyCharges" class="form-label">Aylık Ücret (₺)</label>
+                                <input type="number" step="0.01" class="form-control" name="MonthlyCharges" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="PhoneService" class="form-label">Telefon Hizmeti</label>
+                                <select class="form-select" name="PhoneService" required>
+                                    <option value="Yes">Evet</option>
+                                    <option value="No">Hayır</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="MultipleLines" class="form-label">Çoklu Hat</label>
+                                <select class="form-select" name="MultipleLines" required>
+                                    <option value="Yes">Evet</option>
+                                    <option value="No">Hayır</option>
+                                    <option value="No phone service">Telefon Hizmeti Yok</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="InternetService" class="form-label">İnternet Hizmeti</label>
+                                <select class="form-select" name="InternetService" required>
+                                    <option value="DSL">DSL</option>
+                                    <option value="Fiber optic">Fiber Optik</option>
+                                    <option value="No">Yok</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="OnlineSecurity" class="form-label">Online Güvenlik</label>
+                                <select class="form-select" name="OnlineSecurity">
+                                    <option value="Yes">Evet</option>
+                                    <option value="No">Hayır</option>
+                                    <option value="No internet service">İnternet Hizmeti Yok</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="Contract" class="form-label">Sözleşme</label>
+                                <select class="form-select" name="Contract" required>
+                                    <option value="Month-to-month">Aylık</option>
+                                    <option value="One year">1 Yıl</option>
+                                    <option value="Two year">2 Yıl</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="PaperlessBilling" class="form-label">Kağıtsız Fatura</label>
+                                <select class="form-select" name="PaperlessBilling" required>
+                                    <option value="Yes">Evet</option>
+                                    <option value="No">Hayır</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="PaymentMethod" class="form-label">Ödeme Yöntemi</label>
+                                <select class="form-select" name="PaymentMethod" required>
+                                    <option value="Electronic check">Elektronik Çek</option>
+                                    <option value="Mailed check">Posta Çeki</option>
+                                    <option value="Bank transfer (automatic)">Banka Havalesi (Otomatik)</option>
+                                    <option value="Credit card (automatic)">Kredi Kartı (Otomatik)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary px-5">
+                                <i class="fas fa-check-circle me-2"></i> Tahmin Et
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

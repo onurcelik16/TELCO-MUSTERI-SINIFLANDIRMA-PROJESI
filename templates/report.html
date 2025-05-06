@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Sınıflandırma Raporu - Telco Müşteri Sınıflandırma{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-file-alt me-2"></i> Sınıflandırma Raporu</h4>
+                </div>
+                <div class="card-body">
+                    <p class="mb-4">
+                        Aşağıda model performansına ilişkin detaylı sınıflandırma raporu, karışıklık matrisi ve eşik değerleri ile ilgili bilgiler yer almaktadır.
+                    </p>
+
+                    <h5 class="mb-3 text-primary">Sınıflandırma Raporu</h5>
+                    <pre class="bg-light p-3 border rounded">{{ classification_report }}</pre>
+
+                    <h5 class="mb-3 text-primary">En İyi Eşik Değeri</h5>
+                    <div class="alert alert-info">
+                        Bu model için optimize edilmiş eşik değeri: <strong>{{ optimal_threshold }}</strong>
+                    </div>
+
+                    <h5 class="mb-3 text-primary">Karışıklık Matrisi</h5>
+                    <img src="{{ url_for('static', filename='model_ciktilari/confusion_matrix.png') }}" class="img-fluid rounded border" alt="Karışıklık Matrisi">
+
+                    <h5 class="mt-4 mb-3 text-primary">ROC Curve</h5>
+                    <img src="{{ url_for('static', filename='model_ciktilari/egitim_grafikleri.png') }}" class="img-fluid rounded border" alt="ROC ve Diğer Grafikler">
+
+                    <h5 class="mt-4 mb-3 text-primary">Precision-Recall Curve</h5>
+                    <img src="{{ url_for('static', filename='model_ciktilari/precision_recall_curve.png') }}" class="img-fluid rounded border" alt="Precision-Recall">
+
+                    <div class="mt-4">
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Ana Sayfa
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

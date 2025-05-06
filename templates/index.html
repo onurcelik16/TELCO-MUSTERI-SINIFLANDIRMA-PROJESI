@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Ana Sayfa - Telco Müşteri Sınıflandırma{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-4 mb-4">Telco Müşteri Sınıflandırma Sistemi</h1>
+        <p class="lead mb-4">
+            Yapay sinir ağları kullanarak telekomünikasyon müşteri verilerini analiz eden ve sınıflandıran
+            gelişmiş makine öğrenmesi çözümü.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('musteri_formu') }}" class="btn btn-light btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Müşteri Sınıflandır
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-chart-line me-2"></i>Dashboard
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Sistem Özellikleri</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4>Yapay Sinir Ağları</h4>
+                        <p class="card-text">
+                            Derin öğrenme algoritmaları kullanarak yüksek doğruluklu müşteri sınıflandırma ve tahmini.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h4>Müşteri Analizi</h4>
+                        <p class="card-text">
+                            Müşteri davranışlarını analiz eden ve risk seviyelerini belirleyen kapsamlı sınıflandırma.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h4>Akıllı Öneriler</h4>
+                        <p class="card-text">
+                            Müşteri verilerine dayalı olarak kişiselleştirilmiş stratejiler ve eylem önerileri.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h4>Gerçek Zamanlı Dashboard</h4>
+                        <p class="card-text">
+                            Model performansını ve sonuçları görselleştiren interaktif grafikler ve analizler.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Yüksek Doğruluk</h4>
+                        <p class="card-text">
+                            Optimize edilmiş algoritmalar ve dengelenmiş veri seti ile sınıflandırmada yüksek isabet.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Nasıl Çalışır?</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-0">
+                        {% for step, title, description in [(1, 'Veri Girişi', 'Müşteri demografik bilgileri, hizmet kullanımı ve ödeme verileri sisteme girilir.'),
+                                                           (2, 'Veri İşleme', 'Veriler normalize edilir, özellik mühendisliği uygulanır ve model için hazırlanır.'),
+                                                           (3, 'Sınıflandırma', 'Yapay sinir ağları modeli verileri analiz eder ve müşteri risk sınıflandırmasını yapar.'),
+                                                           (4, 'Sonuç ve Öneriler', 'Sınıflandırma sonuçları, risk analizi ve kişiselleştirilmiş öneriler sunulur.')]
+                        %}
+                        <div class="row g-0">
+                            <div class="col-md-3 text-center p-4 border-end">
+                                <div class="h1 text-primary mb-0">{{ step }}</div>
+                                <h5>{{ title }}</h5>
+                            </div>
+                            <div class="col-md-9 p-4">
+                                <p class="mb-0">{{ description }}</p>
+                            </div>
+                        </div>
+                        {% if not loop.last %}<hr class="m-0">{% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Hemen Kullanmaya Başlayın</h2>
+        <p class="lead mb-4">Müşteri sınıflandırma sistemimizi kullanarak müşteri ilişkilerinizi güçlendirin ve kaybı önleyin.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('musteri_formu') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Müşteri Sınıflandır
+            </a>
+            <a href="{{ url_for('rapor') }}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-file-alt me-2"></i>Sınıflandırma Raporu
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

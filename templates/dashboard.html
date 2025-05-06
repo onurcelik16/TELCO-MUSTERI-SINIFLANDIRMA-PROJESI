@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Telco Müşteri Sınıflandırma{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card-metric {
+        border-left: 4px solid var(--primary-color);
+        background-color: var(--light-color);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .metric-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--dark-color);
+    }
+
+    .metric-label {
+        font-size: 1rem;
+        color: #666;
+    }
+
+    canvas {
+        max-width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Model Performans Göstergeleri</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card-metric">
+                <div class="metric-value">{{ metrics.accuracy }}</div>
+                <div class="metric-label">Doğruluk (Accuracy)</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-metric">
+                <div class="metric-value">{{ metrics.precision }}</div>
+                <div class="metric-label">Kesinlik (Precision)</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-metric">
+                <div class="metric-value">{{ metrics.recall }}</div>
+                <div class="metric-label">Duyarlılık (Recall)</div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5">
+    <h3 class="mb-3">Grafikler</h3>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h5>Eğitim Kaybı Grafiği</h5>
+            <img src="{{ url_for('static', filename='egitim_grafikleri.png') }}" alt="Eğitim Grafikleri" class="img-fluid rounded">
+        </div>
+        <div class="col-md-6 mb-4">
+            <h5>Confusion Matrix</h5>
+            <img src="{{ url_for('static', filename='confusion_matrix.png') }}" alt="Confusion Matrix" class="img-fluid rounded">
+        </div>
+        <div class="col-md-6 mb-4">
+            <h5>ROC Curve</h5>
+            <img src="{{ url_for('static', filename='precision_recall_curve.png') }}" alt="ROC Curve" class="img-fluid rounded">
+        </div>
+    </div>
+</div>
+{% endblock %}

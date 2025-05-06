@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Sonuç - Telco Müşteri Sınıflandırma{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fas fa-check-circle me-2"></i> Sınıflandırma Sonucu</h4>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Tahmin edilen durum: 
+                        <strong class="text-{{ 'danger' if prediction else 'success' }}">
+                            {{ 'Ayrılacak' if prediction else 'Kalacak' }}
+                        </strong>
+                    </p>
+
+                    <p>🔍 <strong>Olasılık:</strong> {{ (probability * 100)|round(2) }}%</p>
+
+                    <p>
+                        📌 <strong>Karar Gücü:</strong>
+                        {% if probability < 0.3 or probability > 0.7 %}
+                            <span class="text-success">Yüksek Güven</span>
+                        {% elif probability < 0.45 or probability > 0.55 %}
+                            <span class="text-warning">Orta Güven</span>
+                        {% else %}
+                            <span class="text-danger">Düşük Güven</span>
+                        {% endif %}
+                    </p>
+
+                    <p>📊 <strong>Risk Seviyesi:</strong> {{ risk_level }}</p>
+
+                    {% if risk_chart %}
+                    <div class="text-center my-4">
+                        <img src="data:image/png;base64,{{ risk_chart }}" alt="Risk Grafiği" class="img-fluid"/>
+                    </div>
+                    {% endif %}
+
+                    <div class="alert alert-info mt-4">
+                        {% if prediction %}
+                            ⚠️ <strong>Not:</strong> Bu müşteri ayrılabilir. Özellikle yüksek ücret, kısa süreli kullanım ve ayda-ay sözleşme gibi etkenler riski artırabilir.
+                        {% else %}
+                            ✅ <strong>Not:</strong> Bu müşteri büyük ihtimalle kalacaktır. Uygun fiyat ve uzun süreli sözleşme gibi etkenler risk azaltıcıdır.
+                        {% endif %}
+                    </div>
+
+                    <h5 class="mt-4">Giriş Verileri</h5>
+                    <ul class="list-group">
+                        {% for key, value in customer_data.items() %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>{{ key.replace('_', ' ') }}</span>
+                            <span class="fw-bold">{{ value }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="text-center mt-4">
+                        <a href="{{ url_for('musteri_formu') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i> Yeni Tahmin
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
