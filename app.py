@@ -3,12 +3,14 @@ import pandas as pd
 import numpy as np
 import joblib
 import os
+from datetime import datetime
 from tensorflow.keras.models import load_model
 import base64
 from io import BytesIO
 import matplotlib
-matplotlib.use('Agg')  # GUI olmayan ortamlarda çizim için
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import re
 
 app = Flask(__name__)
 app.secret_key = "telco_musteri_siniflandirma_projesi"
@@ -18,8 +20,6 @@ model = None
 scaler = None
 optimal_threshold = None
 feature_names = None
-
-# Model bileşenlerini yükle
 
 def load_model_components():
     global model, scaler, optimal_threshold, feature_names
@@ -44,17 +44,53 @@ def musteri_formu():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    try:
+        rapor_path = os.path.join(MODEL_DIR, "siniflandirma_raporu.txt")
+        with open(rapor_path, "r") as file:
+            lines = file.readlines()
+
+        lines = [line.strip() for line in lines if line.strip()]
+
+        for line in lines:
+            if line.startswith("accuracy"):
+                match = re.findall(r"[\d.]+", line)
+                if match:
+                    accuracy = float(match[0])
+                    break
+        else:
+            raise ValueError("Accuracy değeri bulunamadı.")
+
+        macro_line = next(line for line in lines if line.startswith("macro avg"))
+        macro_values = re.findall(r"[\d.]+", macro_line)
+        if len(macro_values) < 3:
+            raise ValueError("macro avg satırında eksik veri var.")
+        precision, recall, f1_score = map(float, macro_values[:3])
+
+        metrics = {
+            "accuracy": round(accuracy, 2),
+            "precision": round(precision, 2),
+            "recall": round(recall, 2),
+            "f1_score": round(f1_score, 2)
+        }
+
+        return render_template("dashboard.html", metrics=metrics)
+
+    except Exception as e:
+        flash(f"Dashboard yüklenemedi: {e}", "danger")
+        return redirect(url_for("index"))
 
 @app.route('/rapor')
 def rapor():
     try:
-        with open(f"{MODEL_DIR}/siniflandirma_raporu.txt", "r") as file:
-            rapor_icerik = file.read()
-        return render_template("report.html", rapor=rapor_icerik)
+        model_date = datetime.now().strftime("%d.%m.%Y %H:%M")  # dilersen kayıtlı tarihi getir
+        return render_template("report.html",
+                               optimal_threshold=optimal_threshold,
+                               feature_names=feature_names,
+                               model_date=model_date)
     except Exception as e:
         flash(f"Rapor yüklenemedi: {e}", "danger")
         return redirect(url_for('index'))
+
 
 @app.route('/siniflandirma_sonuc', methods=['GET', 'POST'])
 def siniflandirma_sonuc():
@@ -68,6 +104,11 @@ def siniflandirma_sonuc():
         form_data['tenure'] = int(form_data.get('tenure', 0))
         form_data['MonthlyCharges'] = float(form_data.get('MonthlyCharges', 0))
         form_data['TotalCharges'] = form_data['tenure'] * form_data['MonthlyCharges']
+
+        # ✅ Absürt değer kontrolü
+        if form_data['MonthlyCharges'] > 10000 or form_data['TotalCharges'] > 1000000:
+            flash("⚠️ Girdiğiniz değerler gerçek dışı görünüyor. Lütfen kontrol edin.", "danger")
+            return redirect(url_for('musteri_formu'))
 
         df = pd.DataFrame([form_data])
         df = feature_engineering(df)
@@ -86,42 +127,32 @@ def siniflandirma_sonuc():
         flash(f"Hata oluştu: {e}", "danger")
         return redirect(url_for('musteri_formu'))
 
-# Özellik mühendisliği
 
 def feature_engineering(df):
-    df_processed = df.copy()
-
-    # Güvenli dönüşümler (varsa uygula)
-    for col in ['OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']:
-        if col in df_processed.columns:
-            df_processed[col] = df_processed[col].replace({'No internet service': 'No'})
-
-    # Ek özellikler
-    df_processed['OrtalamaSözlesmeÜcreti'] = df_processed['MonthlyCharges'] / (df_processed['tenure'] + 1)
-    df_processed['HizmetDeğeri'] = df_processed['TotalCharges'] / (df_processed['MonthlyCharges'] + 1)
-
-    # One-hot encoding
-    df_processed = pd.get_dummies(df_processed)
-
-    # Eksik olan sütunları tamamla
-    for col in feature_names:
-        if col not in df_processed.columns:
-            df_processed[col] = 0
-
-    # Sıra bozulmasın
-    return df_processed[feature_names]
-
     df = df.copy()
-    df['OrtalamaSözlesmeÜreti'] = df['MonthlyCharges'] / (df['tenure'] + 1)
-    df['HizmetDeğeri'] = df['TotalCharges'] / (df['MonthlyCharges'] + 1)
+    df['TotalCharges'] = df['tenure'] * df['MonthlyCharges']
+
+    gerekli_kolonlar = ['OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']
+    for col in gerekli_kolonlar:
+        if col not in df.columns:
+            df[col] = 'No'
+
     df['SözleşmeSüreci'] = df['tenure'].apply(lambda x: 'Kısa' if x < 12 else ('Orta' if x < 24 else 'Uzun'))
+    df['tenure_kat'] = df['tenure'].apply(lambda x: 'Kısa' if x < 12 else ('Orta' if x < 24 else 'Uzun'))
+    df['monthly_kat'] = df['MonthlyCharges'].apply(lambda x: 'Düşük' if x < 35 else ('Orta' if x < 70 else 'Yüksek'))
+
     hizmet_kolonlari = ['PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup',
                         'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']
+
+    for col in ['OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']:
+        if col in df.columns:
+            df[col] = df[col].replace({'No internet service': 'No'})
+
     df['HizmetSayısı'] = df[hizmet_kolonlari].apply(lambda row: sum(x == 'Yes' for x in row), axis=1)
     df['HizmetYoğunluğu'] = df['HizmetSayısı'] / 9
     df['HizmetBaşıMaliyet'] = df['MonthlyCharges'] / (df['HizmetSayısı'] + 1)
-    df['tenure_kat'] = df['tenure'].apply(lambda x: 'Kısa' if x < 12 else ('Orta' if x < 24 else 'Uzun'))
-    df['monthly_kat'] = df['MonthlyCharges'].apply(lambda x: 'Düşük' if x < 35 else ('Orta' if x < 70 else 'Yüksek'))
+    df['OrtalamaSözlesmeÜcreti'] = df['MonthlyCharges'] / (df['tenure'] + 1)
+    df['HizmetDeğeri'] = df['TotalCharges'] / (df['MonthlyCharges'] + 1)
 
     df = pd.get_dummies(df, columns=[
         'gender', 'Partner', 'Dependents', 'PhoneService', 'MultipleLines',
@@ -136,15 +167,11 @@ def feature_engineering(df):
 
     return df[feature_names]
 
-# Tahmin fonksiyonu
-
 def make_prediction(df):
     X_scaled = scaler.transform(df)
     prob = model.predict(X_scaled)
     pred = (prob >= optimal_threshold).astype(int)
     return pred, prob
-
-# Risk seviyesi
 
 def get_risk_level(prob):
     if prob < 0.3:
@@ -152,8 +179,6 @@ def get_risk_level(prob):
     elif prob < 0.6:
         return "Orta"
     return "Yüksek"
-
-# Risk grafiği
 
 def create_risk_chart(prob):
     fig, ax = plt.subplots(figsize=(4, 2))

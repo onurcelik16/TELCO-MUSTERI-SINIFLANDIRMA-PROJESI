@@ -1,44 +1,49 @@
-{% extends "base.html" %}
+ {% extends "base.html" %}
 
-{% block title %}Sınıflandırma Raporu - Telco Müşteri Sınıflandırma{% endblock %}
+{% block title %}Model Özeti - Telco Müşteri Sınıflandırma{% endblock %}
 
 {% block content %}
 <div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0"><i class="fas fa-file-alt me-2"></i> Sınıflandırma Raporu</h4>
-                </div>
-                <div class="card-body">
-                    <p class="mb-4">
-                        Aşağıda model performansına ilişkin detaylı sınıflandırma raporu, karışıklık matrisi ve eşik değerleri ile ilgili bilgiler yer almaktadır.
-                    </p>
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="fas fa-file-alt me-2"></i> Model Eğitimi Özeti</h4>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Bu sayfa, modelin eğitimiyle ilgili genel bilgileri ve kullanılan parametreleri içerir.</p>
 
-                    <h5 class="mb-3 text-primary">Sınıflandırma Raporu</h5>
-                    <pre class="bg-light p-3 border rounded">{{ classification_report }}</pre>
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><strong>Model Türü</strong></span>
+                    <span>Yapay Sinir Ağı (Keras)</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><strong>Veri Kümesi</strong></span>
+                    <span>Telco Customer Churn (WA_Fn-UseC_-Telco-Customer-Churn.csv)</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><strong>Orijinal Kayıt Sayısı</strong></span>
+                    <span>{{ 7043 }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><strong>SMOTE Sonrası Kayıt Sayısı</strong></span>
+                    <span>{{10326 }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><strong>Kullanılan Özellik Sayısı</strong></span>
+                    <span>{{ feature_names|length }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><strong>Optimal Eşik Değeri</strong></span>
+                    <span>{{ "%.2f"|format(optimal_threshold) }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><strong>Eğitim Tarihi</strong></span>
+                    <span>{{ model_date }}</span>
+                </li>
+            </ul>
 
-                    <h5 class="mb-3 text-primary">En İyi Eşik Değeri</h5>
-                    <div class="alert alert-info">
-                        Bu model için optimize edilmiş eşik değeri: <strong>{{ optimal_threshold }}</strong>
-                    </div>
-
-                    <h5 class="mb-3 text-primary">Karışıklık Matrisi</h5>
-                    <img src="{{ url_for('static', filename='model_ciktilari/confusion_matrix.png') }}" class="img-fluid rounded border" alt="Karışıklık Matrisi">
-
-                    <h5 class="mt-4 mb-3 text-primary">ROC Curve</h5>
-                    <img src="{{ url_for('static', filename='model_ciktilari/egitim_grafikleri.png') }}" class="img-fluid rounded border" alt="ROC ve Diğer Grafikler">
-
-                    <h5 class="mt-4 mb-3 text-primary">Precision-Recall Curve</h5>
-                    <img src="{{ url_for('static', filename='model_ciktilari/precision_recall_curve.png') }}" class="img-fluid rounded border" alt="Precision-Recall">
-
-                    <div class="mt-4">
-                        <a href="{{ url_for('index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-2"></i> Ana Sayfa
-                        </a>
-                    </div>
-
-                </div>
+            <div class="alert alert-info">
+                <strong>Not:</strong> Detaylı metrik ve grafikler için <a href="{{ url_for('dashboard') }}">Dashboard</a> sayfasını ziyaret edebilirsiniz.
             </div>
         </div>
     </div>

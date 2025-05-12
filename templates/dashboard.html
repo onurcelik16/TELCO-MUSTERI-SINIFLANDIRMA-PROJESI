@@ -35,22 +35,28 @@
 <div class="container py-5">
     <h2 class="mb-4">Model Performans Göstergeleri</h2>
     <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card-metric">
                 <div class="metric-value">{{ metrics.accuracy }}</div>
                 <div class="metric-label">Doğruluk (Accuracy)</div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card-metric">
                 <div class="metric-value">{{ metrics.precision }}</div>
                 <div class="metric-label">Kesinlik (Precision)</div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card-metric">
                 <div class="metric-value">{{ metrics.recall }}</div>
                 <div class="metric-label">Duyarlılık (Recall)</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card-metric">
+                <div class="metric-value">{{ metrics.f1_score }}</div>
+                <div class="metric-label">F1 Skoru</div>
             </div>
         </div>
     </div>
@@ -67,8 +73,12 @@
             <img src="{{ url_for('static', filename='confusion_matrix.png') }}" alt="Confusion Matrix" class="img-fluid rounded">
         </div>
         <div class="col-md-6 mb-4">
-            <h5>ROC Curve</h5>
-            <img src="{{ url_for('static', filename='precision_recall_curve.png') }}" alt="ROC Curve" class="img-fluid rounded">
+            <h5>Precision-Recall Curve</h5>
+            <img src="{{ url_for('static', filename='precision_recall_curve.png') }}" alt="Precision Recall" class="img-fluid rounded">
+        </div>
+        <div class="col-md-6 mb-4">
+            <h5>Özellik Önem Grafiği</h5>
+            <img src="{{ url_for('static', filename='feature_importance.png') }}" alt="Özellik Önemi" class="img-fluid rounded">
         </div>
     </div>
 </div>
