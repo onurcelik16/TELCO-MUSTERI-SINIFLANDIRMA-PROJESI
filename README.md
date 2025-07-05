@@ -60,6 +60,4 @@ Gerçek sonuçlar model_evaluation.txt içinde detaylı olarak sunulmuştur.
 
 ---
 
-📝 Elinizde **proje ekran görüntüsü**, **demo linki** veya **model görseli** varsa bana gönderin, README’ye ekleyelim.
 
-İstersen bir de Türkçe + İngilizce çift dil destekli yapabiliriz.
